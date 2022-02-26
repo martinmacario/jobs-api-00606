@@ -9,7 +9,9 @@ const cors = require('cors');
 const xss = require('xss-clean');
 const rateLimiter = require('express-rate-limit');
 
-
+const swaggerUI = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./swagger.yaml')
 // connect db
 const connectDB = require('./db/connect');
 
@@ -36,13 +38,17 @@ app.use(rateLimiter({
   max: 100
 }));
 
+
+
 // routes
 app.use('/api/v1/auth', authorizationRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
 app.use('/', (req,res)=>{
-  res.send('Jobs api 6060 launch...')
+  res.send('<h1>Jobs api</h1><a href="/api-docs">API Documentation</a>')
 })
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
