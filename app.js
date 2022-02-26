@@ -44,11 +44,11 @@ app.use(rateLimiter({
 app.use('/api/v1/auth', authorizationRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
-app.use('/', (req,res)=>{
-  res.send('<h1>Jobs api</h1><a href="/api-docs">API Documentation</a>')
-})
-
+app.get('/', (req, res) => {
+  res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
+});
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
